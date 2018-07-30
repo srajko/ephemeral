@@ -8,4 +8,15 @@
     <PackageReference Include="Antlr4" Version="4.6.4" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Antlr4 Include="TSqlLexer.g4">
+      <Generator>MSBuild:Compile</Generator>
+    </Antlr4>
+  </ItemGroup>
+  <ItemGroup>
+    <Antlr4 Include="TSqlParser.g4">
+      <Generator>MSBuild:Compile</Generator>
+    </Antlr4>
+  </ItemGroup>
+
 </Project>
