@@ -21,7 +21,8 @@ namespace TSqlTests
             var adventureWorksCreate = Scripts.AdventureWorksCreate();
 
             var stream = new AntlrInputStream(adventureWorksCreate);
-            TSqlLexer lexer = new TSqlLexer(stream);
+            var caseInsensitiveStream = new CaseChangingCharStream(stream, upper:true);
+            TSqlLexer lexer = new TSqlLexer(caseInsensitiveStream);
             var tokenStream = new CommonTokenStream(lexer);
             TSqlParser parser = new TSqlParser(tokenStream);
             parser.AddErrorListener(new ErrorListener());
