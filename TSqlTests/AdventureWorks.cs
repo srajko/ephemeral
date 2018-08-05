@@ -20,11 +20,7 @@ namespace TSqlTests
         {
             var adventureWorksCreate = Scripts.AdventureWorksCreate();
 
-            var stream = new AntlrInputStream(adventureWorksCreate);
-            var caseInsensitiveStream = new CaseChangingCharStream(stream, upper:true);
-            TSqlLexer lexer = new TSqlLexer(caseInsensitiveStream);
-            var tokenStream = new CommonTokenStream(lexer);
-            TSqlParser parser = new TSqlParser(tokenStream);
+            TSqlParser parser = TSqlUtilities.GetParser(adventureWorksCreate);
             parser.AddErrorListener(new ErrorListener());
             var command = parser.tsql_file();
             Assert.AreEqual(0, parser.NumberOfSyntaxErrors);
