@@ -669,6 +669,7 @@ PARTITION:                             'PARTITION';
 PARTITIONS:                            'PARTITIONS';
 PARTNER:                               'PARTNER';
 PATH:                                  'PATH';
+PERSISTED:                             'PERSISTED';
 POISON_MESSAGE_HANDLING:               'POISON_MESSAGE_HANDLING';
 POOL:                                  'POOL';
 PORT:                                  'PORT';

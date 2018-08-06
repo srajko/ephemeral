@@ -2700,7 +2700,7 @@ column_def_table_constraint
 
 // https://msdn.microsoft.com/en-us/library/ms187742.aspx
 column_definition
-    : id (data_type | AS expression) (COLLATE id)? null_notnull?
+    : id (data_type | AS expression PERSISTED?) (COLLATE id)? null_notnull?
       ((CONSTRAINT constraint=id)? null_or_default null_or_default?
        | IDENTITY ('(' seed=DECIMAL ',' increment=DECIMAL ')')? (NOT FOR REPLICATION)?)?
       ROWGUIDCOL?

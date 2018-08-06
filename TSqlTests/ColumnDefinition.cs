@@ -18,5 +18,15 @@ namespace TSqlTests
             var columnDefinition = parser.column_definition();
             Assert.AreEqual("[Resume][xml](CONTENT[HumanResources].[HRResumeSchemaCollection])NULL", columnDefinition.GetText());
         }
+
+        [TestMethod]
+        public void TestExpressionColumnDefinition()
+        {
+            var expressionColumnDefinition = "[TotalDue]  AS (isnull(([SubTotal]+[TaxAmt])+[Freight],(0))) PERSISTED NOT NULL";
+
+            TSqlParser parser = TSqlUtilities.GetParser(expressionColumnDefinition);
+            var columnDefinition = parser.column_definition();
+            Assert.AreEqual("[TotalDue]AS(isnull(([SubTotal]+[TaxAmt])+[Freight],(0)))PERSISTEDNOTNULL", columnDefinition.GetText());
+        }
     }
 }
