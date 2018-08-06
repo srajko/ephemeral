@@ -2681,11 +2681,11 @@ table_type_definition
     ;
 
 xml_type_definition
-    : XML '(' ( CONTENT | DOCUMENT )? xml_schema_collection ')'
+    : (XML | XML_BRACKETED) ('(' ( CONTENT | DOCUMENT )? xml_schema_collection ')')?
     ;
 
 xml_schema_collection
-    : ID '.' ID
+    : id '.' id
     ;
 
 column_def_table_constraints
@@ -3547,14 +3547,14 @@ data_type
     | TINYINT
     | UNIQUEIDENTIFIER
     | VARBINARY '(' DECIMAL | MAX ')'
-    | VARCHAR '(' DECIMAL | MAX ')'
-    | XML*/
+    | VARCHAR '(' DECIMAL | MAX ')'*/
     : ( schema_name=id DOT )? id IDENTITY? ('(' (DECIMAL | MAX) (',' DECIMAL)? ')')?
     | DOUBLE PRECISION?
     | INT
     | TINYINT
     | SMALLINT
     | BIGINT
+    | xml_type_definition
     ;
 
 default_value

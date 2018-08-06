@@ -808,6 +808,7 @@ WITHOUT_ARRAY_WRAPPER:                 'WITHOUT_ARRAY_WRAPPER';
 WORK:                                  'WORK';
 WORKLOAD:                              'WORKLOAD';
 XML:                                   'XML';
+XML_BRACKETED:                         '[XML]';
 XMLDATA:                               'XMLDATA';
 XMLNAMESPACES:                         'XMLNAMESPACES';
 XMLSCHEMA:                             'XMLSCHEMA';
