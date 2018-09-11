@@ -755,6 +755,7 @@ SINGLE_USER:                           'SINGLE_USER';
 SIZE:                                  'SIZE';
 SMALLINT:                              'SMALLINT';
 SNAPSHOT:                              'SNAPSHOT';
+SPARSE:                                'SPARSE';
 SPATIAL_WINDOW_MAX_CELLS:              'SPATIAL_WINDOW_MAX_CELLS';
 STANDBY:                               'STANDBY';
 START_DATE:                            'START_DATE';

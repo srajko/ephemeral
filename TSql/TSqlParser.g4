@@ -2703,6 +2703,7 @@ column_definition
     : id (data_type | AS expression PERSISTED?) (COLLATE id)? null_notnull?
       ((CONSTRAINT constraint=id)? null_or_default null_or_default?
        | IDENTITY ('(' seed=DECIMAL ',' increment=DECIMAL ')')? (NOT FOR REPLICATION)?)?
+      SPARSE?
       ROWGUIDCOL?
       column_constraint*
     ;
