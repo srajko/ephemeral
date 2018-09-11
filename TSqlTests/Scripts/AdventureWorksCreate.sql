@@ -1,6 +1,372 @@
 ﻿USE [AdventureWorks2017]
 GO
-/****** Object:  Table [dbo].[AWBuildVersion]    Script Date: 7/29/2018 8:38:17 PM ******/
+/****** Object:  Schema [HumanResources]    Script Date: 8/5/2018 10:46:24 PM ******/
+CREATE SCHEMA [HumanResources]
+GO
+/****** Object:  Schema [Person]    Script Date: 8/5/2018 10:46:24 PM ******/
+CREATE SCHEMA [Person]
+GO
+/****** Object:  Schema [Production]    Script Date: 8/5/2018 10:46:24 PM ******/
+CREATE SCHEMA [Production]
+GO
+/****** Object:  Schema [Purchasing]    Script Date: 8/5/2018 10:46:24 PM ******/
+CREATE SCHEMA [Purchasing]
+GO
+/****** Object:  Schema [Sales]    Script Date: 8/5/2018 10:46:24 PM ******/
+CREATE SCHEMA [Sales]
+GO
+/****** Object:  XmlSchemaCollection [Person].[AdditionalContactInfoSchemaCollection]    Script Date: 8/5/2018 10:46:24 PM ******/
+CREATE XML SCHEMA COLLECTION [Person].[AdditionalContactInfoSchemaCollection] AS N'<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:t="http://schemas.microsoft.com/sqlserver/2004/07/adventure-works/ContactInfo" targetNamespace="http://schemas.microsoft.com/sqlserver/2004/07/adventure-works/ContactInfo"><xsd:element name="AdditionalContactInfo"><xsd:complexType mixed="true"><xsd:complexContent mixed="true"><xsd:restriction base="xsd:anyType"><xsd:sequence><xsd:any namespace="http://schemas.microsoft.com/sqlserver/2004/07/adventure-works/ContactRecord http://schemas.microsoft.com/sqlserver/2004/07/adventure-works/ContactTypes" minOccurs="0" maxOccurs="unbounded" /></xsd:sequence></xsd:restriction></xsd:complexContent></xsd:complexType></xsd:element></xsd:schema><xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:t="http://schemas.microsoft.com/sqlserver/2004/07/adventure-works/ContactRecord" targetNamespace="http://schemas.microsoft.com/sqlserver/2004/07/adventure-works/ContactRecord"><xsd:element name="ContactRecord"><xsd:complexType mixed="true"><xsd:complexContent mixed="true"><xsd:restriction base="xsd:anyType"><xsd:choice minOccurs="0" maxOccurs="unbounded"><xsd:any namespace="http://schemas.microsoft.com/sqlserver/2004/07/adventure-works/ContactTypes" /></xsd:choice><xsd:attribute name="date" type="xsd:date" /></xsd:restriction></xsd:complexContent></xsd:complexType></xsd:element></xsd:schema><xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:t="http://schemas.microsoft.com/sqlserver/2004/07/adventure-works/ContactTypes" targetNamespace="http://schemas.microsoft.com/sqlserver/2004/07/adventure-works/ContactTypes" elementFormDefault="qualified"><xsd:element name="eMail" type="t:eMailType" /><xsd:element name="facsimileTelephoneNumber" type="t:phoneNumberType" /><xsd:element name="homePostalAddress" type="t:addressType" /><xsd:element name="internationaliSDNNumber" type="t:phoneNumberType" /><xsd:element name="mobile" type="t:phoneNumberType" /><xsd:element name="pager" type="t:phoneNumberType" /><xsd:element name="physicalDeliveryOfficeName" type="t:addressType" /><xsd:element name="registeredAddress" type="t:addressType" /><xsd:element name="telephoneNumber" type="t:phoneNumberType" /><xsd:element name="telexNumber" type="t:phoneNumberType" /><xsd:complexType name="addressType"><xsd:complexContent><xsd:restriction base="xsd:anyType"><xsd:sequence><xsd:element name="Street" type="xsd:string" maxOccurs="2" /><xsd:element name="City" type="xsd:string" /><xsd:element name="StateProvince" type="xsd:string" /><xsd:element name="PostalCode" type="xsd:string" minOccurs="0" /><xsd:element name="CountryRegion" type="xsd:string" /><xsd:element name="SpecialInstructions" type="t:specialInstructionsType" minOccurs="0" /></xsd:sequence></xsd:restriction></xsd:complexContent></xsd:complexType><xsd:complexType name="eMailType"><xsd:complexContent><xsd:restriction base="xsd:anyType"><xsd:sequence><xsd:element name="eMailAddress" type="xsd:string" /><xsd:element name="SpecialInstructions" type="t:specialInstructionsType" minOccurs="0" /></xsd:sequence></xsd:restriction></xsd:complexContent></xsd:complexType><xsd:complexType name="phoneNumberType"><xsd:complexContent><xsd:restriction base="xsd:anyType"><xsd:sequence><xsd:element name="number"><xsd:simpleType><xsd:restriction base="xsd:string"><xsd:pattern value="[0-9\(\)\-]*" /></xsd:restriction></xsd:simpleType></xsd:element><xsd:element name="SpecialInstructions" type="t:specialInstructionsType" minOccurs="0" /></xsd:sequence></xsd:restriction></xsd:complexContent></xsd:complexType><xsd:complexType name="specialInstructionsType" mixed="true"><xsd:complexContent mixed="true"><xsd:restriction base="xsd:anyType"><xsd:sequence><xsd:any namespace="http://schemas.microsoft.com/sqlserver/2004/07/adventure-works/ContactTypes" minOccurs="0" maxOccurs="unbounded" /></xsd:sequence></xsd:restriction></xsd:complexContent></xsd:complexType></xsd:schema>'
+GO
+/****** Object:  XmlSchemaCollection [HumanResources].[HRResumeSchemaCollection]    Script Date: 8/5/2018 10:46:24 PM ******/
+CREATE XML SCHEMA COLLECTION [HumanResources].[HRResumeSchemaCollection] AS N'<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:t="http://schemas.microsoft.com/sqlserver/2004/07/adventure-works/Resume" targetNamespace="http://schemas.microsoft.com/sqlserver/2004/07/adventure-works/Resume" elementFormDefault="qualified"><xsd:element name="Address" type="t:AddressType" /><xsd:element name="Education" type="t:EducationType" /><xsd:element name="Employment" type="t:EmploymentType" /><xsd:element name="Location" type="t:LocationType" /><xsd:element name="Name" type="t:NameType" /><xsd:element name="Resume" type="t:ResumeType" /><xsd:element name="Telephone" type="t:TelephoneType" /><xsd:complexType name="AddressType"><xsd:complexContent><xsd:restriction base="xsd:anyType"><xsd:sequence><xsd:element name="Addr.Type" type="xsd:string" /><xsd:element name="Addr.OrgName" type="xsd:string" minOccurs="0" /><xsd:element name="Addr.Street" type="xsd:string" maxOccurs="unbounded" /><xsd:element name="Addr.Location"><xsd:complexType><xsd:complexContent><xsd:restriction base="xsd:anyType"><xsd:sequence><xsd:element ref="t:Location" /></xsd:sequence></xsd:restriction></xsd:complexContent></xsd:complexType></xsd:element><xsd:element name="Addr.PostalCode" type="xsd:string" /><xsd:element name="Addr.Telephone" minOccurs="0"><xsd:complexType><xsd:complexContent><xsd:restriction base="xsd:anyType"><xsd:sequence><xsd:element ref="t:Telephone" maxOccurs="unbounded" /></xsd:sequence></xsd:restriction></xsd:complexContent></xsd:complexType></xsd:element></xsd:sequence></xsd:restriction></xsd:complexContent></xsd:complexType><xsd:complexType name="EducationType"><xsd:complexContent><xsd:restriction base="xsd:anyType"><xsd:sequence><xsd:element name="Edu.Level" type="xsd:string" /><xsd:element name="Edu.StartDate" type="xsd:date" /><xsd:element name="Edu.EndDate" type="xsd:date" /><xsd:element name="Edu.Degree" type="xsd:string" minOccurs="0" /><xsd:element name="Edu.Major" type="xsd:string" minOccurs="0" /><xsd:element name="Edu.Minor" type="xsd:string" minOccurs="0" /><xsd:element name="Edu.GPA" type="xsd:string" minOccurs="0" /><xsd:element name="Edu.GPAAlternate" type="xsd:decimal" minOccurs="0" /><xsd:element name="Edu.GPAScale" type="xsd:decimal" minOccurs="0" /><xsd:element name="Edu.School" type="xsd:string" minOccurs="0" /><xsd:element name="Edu.Location" minOccurs="0"><xsd:complexType><xsd:complexContent><xsd:restriction base="xsd:anyType"><xsd:sequence><xsd:element ref="t:Location" /></xsd:sequence></xsd:restriction></xsd:complexContent></xsd:complexType></xsd:element></xsd:sequence></xsd:restriction></xsd:complexContent></xsd:complexType><xsd:complexType name="EmploymentType"><xsd:complexContent><xsd:restriction base="xsd:anyType"><xsd:sequence><xsd:element name="Emp.StartDate" type="xsd:date" minOccurs="0" /><xsd:element name="Emp.EndDate" type="xsd:date" minOccurs="0" /><xsd:element name="Emp.OrgName" type="xsd:string" /><xsd:element name="Emp.JobTitle" type="xsd:string" /><xsd:element name="Emp.Responsibility" type="xsd:string" /><xsd:element name="Emp.FunctionCategory" type="xsd:string" minOccurs="0" /><xsd:element name="Emp.IndustryCategory" type="xsd:string" minOccurs="0" /><xsd:element name="Emp.Location" minOccurs="0"><xsd:complexType><xsd:complexContent><xsd:restriction base="xsd:anyType"><xsd:sequence><xsd:element ref="t:Location" /></xsd:sequence></xsd:restriction></xsd:complexContent></xsd:complexType></xsd:element></xsd:sequence></xsd:restriction></xsd:complexContent></xsd:complexType><xsd:complexType name="LocationType"><xsd:complexContent><xsd:restriction base="xsd:anyType"><xsd:sequence><xsd:element name="Loc.CountryRegion" type="xsd:string" /><xsd:element name="Loc.State" type="xsd:string" minOccurs="0" /><xsd:element name="Loc.City" type="xsd:string" minOccurs="0" /></xsd:sequence></xsd:restriction></xsd:complexContent></xsd:complexType><xsd:complexType name="NameType"><xsd:complexContent><xsd:restriction base="xsd:anyType"><xsd:sequence><xsd:element name="Name.Prefix" type="xsd:string" minOccurs="0" /><xsd:element name="Name.First" type="xsd:string" /><xsd:element name="Name.Middle" type="xsd:string" minOccurs="0" /><xsd:element name="Name.Last" type="xsd:string" /><xsd:element name="Name.Suffix" type="xsd:string" minOccurs="0" /></xsd:sequence></xsd:restriction></xsd:complexContent></xsd:complexType><xsd:complexType name="ResumeType"><xsd:complexContent><xsd:restriction base="xsd:anyType"><xsd:sequence><xsd:element ref="t:Name" /><xsd:element name="Skills" type="xsd:string" minOccurs="0" /><xsd:element ref="t:Employment" maxOccurs="unbounded" /><xsd:element ref="t:Education" maxOccurs="unbounded" /><xsd:element ref="t:Address" maxOccurs="unbounded" /><xsd:element ref="t:Telephone" minOccurs="0" /><xsd:element name="EMail" type="xsd:string" minOccurs="0" /><xsd:element name="WebSite" type="xsd:string" minOccurs="0" /></xsd:sequence></xsd:restriction></xsd:complexContent></xsd:complexType><xsd:complexType name="TelephoneType"><xsd:complexContent><xsd:restriction base="xsd:anyType"><xsd:sequence><xsd:element name="Tel.Type" type="xsd:anyType" minOccurs="0" /><xsd:element name="Tel.IntlCode" type="xsd:int" minOccurs="0" /><xsd:element name="Tel.AreaCode" type="xsd:int" minOccurs="0" /><xsd:element name="Tel.Number" type="xsd:string" /><xsd:element name="Tel.Extension" type="xsd:int" minOccurs="0" /></xsd:sequence></xsd:restriction></xsd:complexContent></xsd:complexType></xsd:schema>'
+GO
+/****** Object:  XmlSchemaCollection [Person].[IndividualSurveySchemaCollection]    Script Date: 8/5/2018 10:46:24 PM ******/
+CREATE XML SCHEMA COLLECTION [Person].[IndividualSurveySchemaCollection] AS N'<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:t="http://schemas.microsoft.com/sqlserver/2004/07/adventure-works/IndividualSurvey" targetNamespace="http://schemas.microsoft.com/sqlserver/2004/07/adventure-works/IndividualSurvey" elementFormDefault="qualified"><xsd:element name="IndividualSurvey"><xsd:complexType><xsd:complexContent><xsd:restriction base="xsd:anyType"><xsd:sequence><xsd:element name="TotalPurchaseYTD" type="xsd:decimal" minOccurs="0" /><xsd:element name="DateFirstPurchase" type="xsd:date" minOccurs="0" /><xsd:element name="BirthDate" type="xsd:date" minOccurs="0" /><xsd:element name="MaritalStatus" type="xsd:string" minOccurs="0" /><xsd:element name="YearlyIncome" type="t:SalaryType" minOccurs="0" /><xsd:element name="Gender" type="xsd:string" minOccurs="0" /><xsd:element name="TotalChildren" type="xsd:int" minOccurs="0" /><xsd:element name="NumberChildrenAtHome" type="xsd:int" minOccurs="0" /><xsd:element name="Education" type="xsd:string" minOccurs="0" /><xsd:element name="Occupation" type="xsd:string" minOccurs="0" /><xsd:element name="HomeOwnerFlag" type="xsd:string" minOccurs="0" /><xsd:element name="NumberCarsOwned" type="xsd:int" minOccurs="0" /><xsd:element name="Hobby" type="xsd:string" minOccurs="0" maxOccurs="unbounded" /><xsd:element name="CommuteDistance" type="t:MileRangeType" minOccurs="0" /><xsd:element name="Comments" type="xsd:string" minOccurs="0" /></xsd:sequence></xsd:restriction></xsd:complexContent></xsd:complexType></xsd:element><xsd:simpleType name="MileRangeType"><xsd:restriction base="xsd:string"><xsd:enumeration value="0-1 Miles" /><xsd:enumeration value="1-2 Miles" /><xsd:enumeration value="2-5 Miles" /><xsd:enumeration value="5-10 Miles" /><xsd:enumeration value="10+ Miles" /></xsd:restriction></xsd:simpleType><xsd:simpleType name="SalaryType"><xsd:restriction base="xsd:string"><xsd:enumeration value="0-25000" /><xsd:enumeration value="25001-50000" /><xsd:enumeration value="50001-75000" /><xsd:enumeration value="75001-100000" /><xsd:enumeration value="greater than 100000" /></xsd:restriction></xsd:simpleType></xsd:schema>'
+GO
+/****** Object:  XmlSchemaCollection [Production].[ManuInstructionsSchemaCollection]    Script Date: 8/5/2018 10:46:24 PM ******/
+CREATE XML SCHEMA COLLECTION [Production].[ManuInstructionsSchemaCollection] AS N'<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:t="http://schemas.microsoft.com/sqlserver/2004/07/adventure-works/ProductModelManuInstructions" targetNamespace="http://schemas.microsoft.com/sqlserver/2004/07/adventure-works/ProductModelManuInstructions" elementFormDefault="qualified"><xsd:element name="root"><xsd:complexType mixed="true"><xsd:complexContent mixed="true"><xsd:restriction base="xsd:anyType"><xsd:sequence><xsd:element name="Location" maxOccurs="unbounded"><xsd:complexType mixed="true"><xsd:complexContent mixed="true"><xsd:restriction base="xsd:anyType"><xsd:sequence><xsd:element name="step" type="t:StepType" maxOccurs="unbounded" /></xsd:sequence><xsd:attribute name="LocationID" type="xsd:integer" use="required" /><xsd:attribute name="SetupHours" type="xsd:decimal" /><xsd:attribute name="MachineHours" type="xsd:decimal" /><xsd:attribute name="LaborHours" type="xsd:decimal" /><xsd:attribute name="LotSize" type="xsd:decimal" /></xsd:restriction></xsd:complexContent></xsd:complexType></xsd:element></xsd:sequence></xsd:restriction></xsd:complexContent></xsd:complexType></xsd:element><xsd:complexType name="StepType" mixed="true"><xsd:complexContent mixed="true"><xsd:restriction base="xsd:anyType"><xsd:choice minOccurs="0" maxOccurs="unbounded"><xsd:element name="tool" type="xsd:string" /><xsd:element name="material" type="xsd:string" /><xsd:element name="blueprint" type="xsd:string" /><xsd:element name="specs" type="xsd:string" /><xsd:element name="diag" type="xsd:string" /></xsd:choice></xsd:restriction></xsd:complexContent></xsd:complexType></xsd:schema>'
+GO
+/****** Object:  XmlSchemaCollection [Production].[ProductDescriptionSchemaCollection]    Script Date: 8/5/2018 10:46:24 PM ******/
+CREATE XML SCHEMA COLLECTION [Production].[ProductDescriptionSchemaCollection] AS N'<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:t="http://schemas.microsoft.com/sqlserver/2004/07/adventure-works/ProductModelWarrAndMain" targetNamespace="http://schemas.microsoft.com/sqlserver/2004/07/adventure-works/ProductModelWarrAndMain" elementFormDefault="qualified"><xsd:element name="Maintenance"><xsd:complexType><xsd:complexContent><xsd:restriction base="xsd:anyType"><xsd:sequence><xsd:element name="NoOfYears" type="xsd:string" /><xsd:element name="Description" type="xsd:string" /></xsd:sequence></xsd:restriction></xsd:complexContent></xsd:complexType></xsd:element><xsd:element name="Warranty"><xsd:complexType><xsd:complexContent><xsd:restriction base="xsd:anyType"><xsd:sequence><xsd:element name="WarrantyPeriod" type="xsd:string" /><xsd:element name="Description" type="xsd:string" /></xsd:sequence></xsd:restriction></xsd:complexContent></xsd:complexType></xsd:element></xsd:schema><xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns1="http://schemas.microsoft.com/sqlserver/2004/07/adventure-works/ProductModelWarrAndMain" xmlns:t="http://schemas.microsoft.com/sqlserver/2004/07/adventure-works/ProductModelDescription" targetNamespace="http://schemas.microsoft.com/sqlserver/2004/07/adventure-works/ProductModelDescription" elementFormDefault="qualified"><xsd:import namespace="http://schemas.microsoft.com/sqlserver/2004/07/adventure-works/ProductModelWarrAndMain" /><xsd:element name="Code" type="xsd:string" /><xsd:element name="Description" type="xsd:string" /><xsd:element name="ProductDescription" type="t:ProductDescription" /><xsd:element name="Taxonomy" type="xsd:string" /><xsd:complexType name="Category"><xsd:complexContent><xsd:restriction base="xsd:anyType"><xsd:sequence><xsd:element ref="t:Taxonomy" /><xsd:element ref="t:Code" /><xsd:element ref="t:Description" minOccurs="0" /></xsd:sequence></xsd:restriction></xsd:complexContent></xsd:complexType><xsd:complexType name="Features" mixed="true"><xsd:complexContent mixed="true"><xsd:restriction base="xsd:anyType"><xsd:sequence><xsd:element ref="ns1:Warranty" /><xsd:element ref="ns1:Maintenance" /><xsd:any namespace="##other" processContents="skip" minOccurs="0" maxOccurs="unbounded" /></xsd:sequence></xsd:restriction></xsd:complexContent></xsd:complexType><xsd:complexType name="Manufacturer"><xsd:complexContent><xsd:restriction base="xsd:anyType"><xsd:sequence><xsd:element name="Name" type="xsd:string" minOccurs="0" /><xsd:element name="CopyrightURL" type="xsd:string" minOccurs="0" /><xsd:element name="Copyright" type="xsd:string" minOccurs="0" /><xsd:element name="ProductURL" type="xsd:string" minOccurs="0" /></xsd:sequence></xsd:restriction></xsd:complexContent></xsd:complexType><xsd:complexType name="Picture"><xsd:complexContent><xsd:restriction base="xsd:anyType"><xsd:sequence><xsd:element name="Name" type="xsd:string" minOccurs="0" /><xsd:element name="Angle" type="xsd:string" minOccurs="0" /><xsd:element name="Size" type="xsd:string" minOccurs="0" /><xsd:element name="ProductPhotoID" type="xsd:integer" minOccurs="0" /></xsd:sequence></xsd:restriction></xsd:complexContent></xsd:complexType><xsd:complexType name="ProductDescription"><xsd:complexContent><xsd:restriction base="xsd:anyType"><xsd:sequence><xsd:element name="Summary" type="t:Summary" minOccurs="0" /><xsd:element name="Manufacturer" type="t:Manufacturer" minOccurs="0" /><xsd:element name="Features" type="t:Features" minOccurs="0" maxOccurs="unbounded" /><xsd:element name="Picture" type="t:Picture" minOccurs="0" maxOccurs="unbounded" /><xsd:element name="Category" type="t:Category" minOccurs="0" maxOccurs="unbounded" /><xsd:element name="Specifications" type="t:Specifications" minOccurs="0" maxOccurs="unbounded" /></xsd:sequence><xsd:attribute name="ProductModelID" type="xsd:string" /><xsd:attribute name="ProductModelName" type="xsd:string" /></xsd:restriction></xsd:complexContent></xsd:complexType><xsd:complexType name="Specifications" mixed="true"><xsd:complexContent mixed="true"><xsd:restriction base="xsd:anyType"><xsd:sequence><xsd:any processContents="skip" minOccurs="0" maxOccurs="unbounded" /></xsd:sequence></xsd:restriction></xsd:complexContent></xsd:complexType><xsd:complexType name="Summary" mixed="true"><xsd:complexContent mixed="true"><xsd:restriction base="xsd:anyType"><xsd:sequence><xsd:any namespace="http://www.w3.org/1999/xhtml" processContents="skip" minOccurs="0" maxOccurs="unbounded" /></xsd:sequence></xsd:restriction></xsd:complexContent></xsd:complexType></xsd:schema>'
+GO
+/****** Object:  XmlSchemaCollection [Sales].[StoreSurveySchemaCollection]    Script Date: 8/5/2018 10:46:24 PM ******/
+CREATE XML SCHEMA COLLECTION [Sales].[StoreSurveySchemaCollection] AS N'<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:t="http://schemas.microsoft.com/sqlserver/2004/07/adventure-works/StoreSurvey" targetNamespace="http://schemas.microsoft.com/sqlserver/2004/07/adventure-works/StoreSurvey" elementFormDefault="qualified"><xsd:element name="StoreSurvey"><xsd:complexType><xsd:complexContent><xsd:restriction base="xsd:anyType"><xsd:sequence><xsd:element name="ContactName" type="xsd:string" minOccurs="0" /><xsd:element name="JobTitle" type="xsd:string" minOccurs="0" /><xsd:element name="AnnualSales" type="xsd:decimal" minOccurs="0" /><xsd:element name="AnnualRevenue" type="xsd:decimal" minOccurs="0" /><xsd:element name="BankName" type="xsd:string" minOccurs="0" /><xsd:element name="BusinessType" type="t:BusinessType" minOccurs="0" /><xsd:element name="YearOpened" type="xsd:gYear" minOccurs="0" /><xsd:element name="Specialty" type="t:SpecialtyType" minOccurs="0" /><xsd:element name="SquareFeet" type="xsd:float" minOccurs="0" /><xsd:element name="Brands" type="t:BrandType" minOccurs="0" /><xsd:element name="Internet" type="t:InternetType" minOccurs="0" /><xsd:element name="NumberEmployees" type="xsd:int" minOccurs="0" /><xsd:element name="Comments" type="xsd:string" minOccurs="0" /></xsd:sequence></xsd:restriction></xsd:complexContent></xsd:complexType></xsd:element><xsd:simpleType name="BrandType"><xsd:restriction base="xsd:string"><xsd:enumeration value="AW" /><xsd:enumeration value="2" /><xsd:enumeration value="3" /><xsd:enumeration value="4+" /></xsd:restriction></xsd:simpleType><xsd:simpleType name="BusinessType"><xsd:restriction base="xsd:string"><xsd:enumeration value="BM" /><xsd:enumeration value="BS" /><xsd:enumeration value="D" /><xsd:enumeration value="OS" /><xsd:enumeration value="SGS" /></xsd:restriction></xsd:simpleType><xsd:simpleType name="InternetType"><xsd:restriction base="xsd:string"><xsd:enumeration value="56kb" /><xsd:enumeration value="ISDN" /><xsd:enumeration value="DSL" /><xsd:enumeration value="T1" /><xsd:enumeration value="T2" /><xsd:enumeration value="T3" /></xsd:restriction></xsd:simpleType><xsd:simpleType name="SpecialtyType"><xsd:restriction base="xsd:string"><xsd:enumeration value="Family" /><xsd:enumeration value="Kids" /><xsd:enumeration value="BMX" /><xsd:enumeration value="Touring" /><xsd:enumeration value="Road" /><xsd:enumeration value="Mountain" /><xsd:enumeration value="All" /></xsd:restriction></xsd:simpleType></xsd:schema>'
+GO
+/****** Object:  UserDefinedDataType [dbo].[AccountNumber]    Script Date: 8/5/2018 10:46:24 PM ******/
+CREATE TYPE [dbo].[AccountNumber] FROM [nvarchar](15) NULL
+GO
+/****** Object:  UserDefinedDataType [dbo].[Flag]    Script Date: 8/5/2018 10:46:24 PM ******/
+CREATE TYPE [dbo].[Flag] FROM [bit] NOT NULL
+GO
+/****** Object:  UserDefinedDataType [dbo].[Name]    Script Date: 8/5/2018 10:46:24 PM ******/
+CREATE TYPE [dbo].[Name] FROM [nvarchar](50) NULL
+GO
+/****** Object:  UserDefinedDataType [dbo].[NameStyle]    Script Date: 8/5/2018 10:46:24 PM ******/
+CREATE TYPE [dbo].[NameStyle] FROM [bit] NOT NULL
+GO
+/****** Object:  UserDefinedDataType [dbo].[OrderNumber]    Script Date: 8/5/2018 10:46:24 PM ******/
+CREATE TYPE [dbo].[OrderNumber] FROM [nvarchar](25) NULL
+GO
+/****** Object:  UserDefinedDataType [dbo].[Phone]    Script Date: 8/5/2018 10:46:24 PM ******/
+CREATE TYPE [dbo].[Phone] FROM [nvarchar](25) NULL
+GO
+/****** Object:  UserDefinedFunction [dbo].[ufnGetAccountingEndDate]    Script Date: 8/5/2018 10:46:24 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE FUNCTION [dbo].[ufnGetAccountingEndDate]()
+RETURNS [datetime] 
+AS 
+BEGIN
+    RETURN DATEADD(millisecond, -2, CONVERT(datetime, '20040701', 112));
+END;
+GO
+/****** Object:  UserDefinedFunction [dbo].[ufnGetAccountingStartDate]    Script Date: 8/5/2018 10:46:24 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE FUNCTION [dbo].[ufnGetAccountingStartDate]()
+RETURNS [datetime] 
+AS 
+BEGIN
+    RETURN CONVERT(datetime, '20030701', 112);
+END;
+GO
+/****** Object:  UserDefinedFunction [dbo].[ufnGetContactInformation]    Script Date: 8/5/2018 10:46:24 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE FUNCTION [dbo].[ufnGetContactInformation](@PersonID int)
+RETURNS @retContactInformation TABLE 
+(
+    -- Columns returned by the function
+    [PersonID] int NOT NULL, 
+    [FirstName] [nvarchar](50) NULL, 
+    [LastName] [nvarchar](50) NULL, 
+	[JobTitle] [nvarchar](50) NULL,
+    [BusinessEntityType] [nvarchar](50) NULL
+)
+AS 
+-- Returns the first name, last name, job title and business entity type for the specified contact.
+-- Since a contact can serve multiple roles, more than one row may be returned.
+BEGIN
+	IF @PersonID IS NOT NULL 
+		BEGIN
+		IF EXISTS(SELECT * FROM [HumanResources].[Employee] e 
+					WHERE e.[BusinessEntityID] = @PersonID) 
+			INSERT INTO @retContactInformation
+				SELECT @PersonID, p.FirstName, p.LastName, e.[JobTitle], 'Employee'
+				FROM [HumanResources].[Employee] AS e
+					INNER JOIN [Person].[Person] p
+					ON p.[BusinessEntityID] = e.[BusinessEntityID]
+				WHERE e.[BusinessEntityID] = @PersonID;
+
+		IF EXISTS(SELECT * FROM [Purchasing].[Vendor] AS v
+					INNER JOIN [Person].[BusinessEntityContact] bec 
+					ON bec.[BusinessEntityID] = v.[BusinessEntityID]
+					WHERE bec.[PersonID] = @PersonID)
+			INSERT INTO @retContactInformation
+				SELECT @PersonID, p.FirstName, p.LastName, ct.[Name], 'Vendor Contact' 
+				FROM [Purchasing].[Vendor] AS v
+					INNER JOIN [Person].[BusinessEntityContact] bec 
+					ON bec.[BusinessEntityID] = v.[BusinessEntityID]
+					INNER JOIN [Person].ContactType ct
+					ON ct.[ContactTypeID] = bec.[ContactTypeID]
+					INNER JOIN [Person].[Person] p
+					ON p.[BusinessEntityID] = bec.[PersonID]
+				WHERE bec.[PersonID] = @PersonID;
+		
+		IF EXISTS(SELECT * FROM [Sales].[Store] AS s
+					INNER JOIN [Person].[BusinessEntityContact] bec 
+					ON bec.[BusinessEntityID] = s.[BusinessEntityID]
+					WHERE bec.[PersonID] = @PersonID)
+			INSERT INTO @retContactInformation
+				SELECT @PersonID, p.FirstName, p.LastName, ct.[Name], 'Store Contact' 
+				FROM [Sales].[Store] AS s
+					INNER JOIN [Person].[BusinessEntityContact] bec 
+					ON bec.[BusinessEntityID] = s.[BusinessEntityID]
+					INNER JOIN [Person].ContactType ct
+					ON ct.[ContactTypeID] = bec.[ContactTypeID]
+					INNER JOIN [Person].[Person] p
+					ON p.[BusinessEntityID] = bec.[PersonID]
+				WHERE bec.[PersonID] = @PersonID;
+
+		IF EXISTS(SELECT * FROM [Person].[Person] AS p
+					INNER JOIN [Sales].[Customer] AS c
+					ON c.[PersonID] = p.[BusinessEntityID]
+					WHERE p.[BusinessEntityID] = @PersonID AND c.[StoreID] IS NULL) 
+			INSERT INTO @retContactInformation
+				SELECT @PersonID, p.FirstName, p.LastName, NULL, 'Consumer' 
+				FROM [Person].[Person] AS p
+					INNER JOIN [Sales].[Customer] AS c
+					ON c.[PersonID] = p.[BusinessEntityID]
+					WHERE p.[BusinessEntityID] = @PersonID AND c.[StoreID] IS NULL; 
+		END
+
+	RETURN;
+END;
+GO
+/****** Object:  UserDefinedFunction [dbo].[ufnGetDocumentStatusText]    Script Date: 8/5/2018 10:46:24 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE FUNCTION [dbo].[ufnGetDocumentStatusText](@Status [tinyint])
+RETURNS [nvarchar](16) 
+AS 
+-- Returns the sales order status text representation for the status value.
+BEGIN
+    DECLARE @ret [nvarchar](16);
+
+    SET @ret = 
+        CASE @Status
+            WHEN 1 THEN N'Pending approval'
+            WHEN 2 THEN N'Approved'
+            WHEN 3 THEN N'Obsolete'
+            ELSE N'** Invalid **'
+        END;
+    
+    RETURN @ret
+END;
+GO
+/****** Object:  UserDefinedFunction [dbo].[ufnGetProductDealerPrice]    Script Date: 8/5/2018 10:46:24 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+
+CREATE FUNCTION [dbo].[ufnGetProductDealerPrice](@ProductID [int], @OrderDate [datetime])
+RETURNS [money] 
+AS 
+-- Returns the dealer price for the product on a specific date.
+BEGIN
+    DECLARE @DealerPrice money;
+    DECLARE @DealerDiscount money;
+
+    SET @DealerDiscount = 0.60  -- 60% of list price
+
+    SELECT @DealerPrice = plph.[ListPrice] * @DealerDiscount 
+    FROM [Production].[Product] p 
+        INNER JOIN [Production].[ProductListPriceHistory] plph 
+        ON p.[ProductID] = plph.[ProductID] 
+            AND p.[ProductID] = @ProductID 
+            AND @OrderDate BETWEEN plph.[StartDate] AND COALESCE(plph.[EndDate], CONVERT(datetime, '99991231', 112)); -- Make sure we get all the prices!
+
+    RETURN @DealerPrice;
+END;
+GO
+/****** Object:  UserDefinedFunction [dbo].[ufnGetProductListPrice]    Script Date: 8/5/2018 10:46:24 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE FUNCTION [dbo].[ufnGetProductListPrice](@ProductID [int], @OrderDate [datetime])
+RETURNS [money] 
+AS 
+BEGIN
+    DECLARE @ListPrice money;
+
+    SELECT @ListPrice = plph.[ListPrice] 
+    FROM [Production].[Product] p 
+        INNER JOIN [Production].[ProductListPriceHistory] plph 
+        ON p.[ProductID] = plph.[ProductID] 
+            AND p.[ProductID] = @ProductID 
+            AND @OrderDate BETWEEN plph.[StartDate] AND COALESCE(plph.[EndDate], CONVERT(datetime, '99991231', 112)); -- Make sure we get all the prices!
+
+    RETURN @ListPrice;
+END;
+GO
+/****** Object:  UserDefinedFunction [dbo].[ufnGetProductStandardCost]    Script Date: 8/5/2018 10:46:24 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE FUNCTION [dbo].[ufnGetProductStandardCost](@ProductID [int], @OrderDate [datetime])
+RETURNS [money] 
+AS 
+-- Returns the standard cost for the product on a specific date.
+BEGIN
+    DECLARE @StandardCost money;
+
+    SELECT @StandardCost = pch.[StandardCost] 
+    FROM [Production].[Product] p 
+        INNER JOIN [Production].[ProductCostHistory] pch 
+        ON p.[ProductID] = pch.[ProductID] 
+            AND p.[ProductID] = @ProductID 
+            AND @OrderDate BETWEEN pch.[StartDate] AND COALESCE(pch.[EndDate], CONVERT(datetime, '99991231', 112)); -- Make sure we get all the prices!
+
+    RETURN @StandardCost;
+END;
+GO
+/****** Object:  UserDefinedFunction [dbo].[ufnGetPurchaseOrderStatusText]    Script Date: 8/5/2018 10:46:24 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE FUNCTION [dbo].[ufnGetPurchaseOrderStatusText](@Status [tinyint])
+RETURNS [nvarchar](15) 
+AS 
+-- Returns the sales order status text representation for the status value.
+BEGIN
+    DECLARE @ret [nvarchar](15);
+
+    SET @ret = 
+        CASE @Status
+            WHEN 1 THEN 'Pending'
+            WHEN 2 THEN 'Approved'
+            WHEN 3 THEN 'Rejected'
+            WHEN 4 THEN 'Complete'
+            ELSE '** Invalid **'
+        END;
+    
+    RETURN @ret
+END;
+GO
+/****** Object:  UserDefinedFunction [dbo].[ufnGetSalesOrderStatusText]    Script Date: 8/5/2018 10:46:24 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE FUNCTION [dbo].[ufnGetSalesOrderStatusText](@Status [tinyint])
+RETURNS [nvarchar](15) 
+AS 
+-- Returns the sales order status text representation for the status value.
+BEGIN
+    DECLARE @ret [nvarchar](15);
+
+    SET @ret = 
+        CASE @Status
+            WHEN 1 THEN 'In process'
+            WHEN 2 THEN 'Approved'
+            WHEN 3 THEN 'Backordered'
+            WHEN 4 THEN 'Rejected'
+            WHEN 5 THEN 'Shipped'
+            WHEN 6 THEN 'Cancelled'
+            ELSE '** Invalid **'
+        END;
+    
+    RETURN @ret
+END;
+GO
+/****** Object:  UserDefinedFunction [dbo].[ufnGetStock]    Script Date: 8/5/2018 10:46:24 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE FUNCTION [dbo].[ufnGetStock](@ProductID [int])
+RETURNS [int] 
+AS 
+-- Returns the stock level for the product. This function is used internally only
+BEGIN
+    DECLARE @ret int;
+    
+    SELECT @ret = SUM(p.[Quantity]) 
+    FROM [Production].[ProductInventory] p 
+    WHERE p.[ProductID] = @ProductID 
+        AND p.[LocationID] = '6'; -- Only look at inventory in the misc storage
+    
+    IF (@ret IS NULL) 
+        SET @ret = 0
+    
+    RETURN @ret
+END;
+GO
+/****** Object:  UserDefinedFunction [dbo].[ufnLeadingZeros]    Script Date: 8/5/2018 10:46:24 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE FUNCTION [dbo].[ufnLeadingZeros](
+    @Value int
+) 
+RETURNS varchar(8) 
+WITH SCHEMABINDING 
+AS 
+BEGIN
+    DECLARE @ReturnValue varchar(8);
+
+    SET @ReturnValue = CONVERT(varchar(8), @Value);
+    SET @ReturnValue = REPLICATE('0', 8 - DATALENGTH(@ReturnValue)) + @ReturnValue;
+
+    RETURN (@ReturnValue);
+END;
+GO
+/****** Object:  Table [Sales].[Customer]    Script Date: 8/5/2018 10:46:24 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [Sales].[Customer](
+	[CustomerID] [int] IDENTITY(1,1) NOT FOR REPLICATION NOT NULL,
+	[PersonID] [int] NULL,
+	[StoreID] [int] NULL,
+	[TerritoryID] [int] NULL,
+	[AccountNumber]  AS (isnull('AW'+[dbo].[ufnLeadingZeros]([CustomerID]),'')),
+	[rowguid] [uniqueidentifier] ROWGUIDCOL  NOT NULL,
+	[ModifiedDate] [datetime] NOT NULL,
+ CONSTRAINT [PK_Customer_CustomerID] PRIMARY KEY CLUSTERED 
+(
+	[CustomerID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[AWBuildVersion]    Script Date: 8/5/2018 10:46:26 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -16,7 +382,7 @@ CREATE TABLE [dbo].[AWBuildVersion](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[DatabaseLog]    Script Date: 7/29/2018 8:38:19 PM ******/
+/****** Object:  Table [dbo].[DatabaseLog]    Script Date: 8/5/2018 10:46:26 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -36,7 +402,7 @@ CREATE TABLE [dbo].[DatabaseLog](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[ErrorLog]    Script Date: 7/29/2018 8:38:19 PM ******/
+/****** Object:  Table [dbo].[ErrorLog]    Script Date: 8/5/2018 10:46:26 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -57,7 +423,7 @@ CREATE TABLE [dbo].[ErrorLog](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [HumanResources].[Department]    Script Date: 7/29/2018 8:38:19 PM ******/
+/****** Object:  Table [HumanResources].[Department]    Script Date: 8/5/2018 10:46:26 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -73,7 +439,7 @@ CREATE TABLE [HumanResources].[Department](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [HumanResources].[Employee]    Script Date: 7/29/2018 8:38:20 PM ******/
+/****** Object:  Table [HumanResources].[Employee]    Script Date: 8/5/2018 10:46:26 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -101,7 +467,7 @@ CREATE TABLE [HumanResources].[Employee](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [HumanResources].[EmployeeDepartmentHistory]    Script Date: 7/29/2018 8:38:20 PM ******/
+/****** Object:  Table [HumanResources].[EmployeeDepartmentHistory]    Script Date: 8/5/2018 10:46:26 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -122,7 +488,7 @@ CREATE TABLE [HumanResources].[EmployeeDepartmentHistory](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [HumanResources].[EmployeePayHistory]    Script Date: 7/29/2018 8:38:20 PM ******/
+/****** Object:  Table [HumanResources].[EmployeePayHistory]    Script Date: 8/5/2018 10:46:26 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -140,7 +506,7 @@ CREATE TABLE [HumanResources].[EmployeePayHistory](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [HumanResources].[JobCandidate]    Script Date: 7/29/2018 8:38:20 PM ******/
+/****** Object:  Table [HumanResources].[JobCandidate]    Script Date: 8/5/2018 10:46:26 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -156,7 +522,7 @@ CREATE TABLE [HumanResources].[JobCandidate](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [HumanResources].[Shift]    Script Date: 7/29/2018 8:38:20 PM ******/
+/****** Object:  Table [HumanResources].[Shift]    Script Date: 8/5/2018 10:46:26 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -173,7 +539,7 @@ CREATE TABLE [HumanResources].[Shift](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [Person].[Address]    Script Date: 7/29/2018 8:38:20 PM ******/
+/****** Object:  Table [Person].[Address]    Script Date: 8/5/2018 10:46:26 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -194,7 +560,7 @@ CREATE TABLE [Person].[Address](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [Person].[AddressType]    Script Date: 7/29/2018 8:38:20 PM ******/
+/****** Object:  Table [Person].[AddressType]    Script Date: 8/5/2018 10:46:26 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -210,7 +576,7 @@ CREATE TABLE [Person].[AddressType](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [Person].[BusinessEntity]    Script Date: 7/29/2018 8:38:20 PM ******/
+/****** Object:  Table [Person].[BusinessEntity]    Script Date: 8/5/2018 10:46:26 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -225,7 +591,7 @@ CREATE TABLE [Person].[BusinessEntity](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [Person].[BusinessEntityAddress]    Script Date: 7/29/2018 8:38:20 PM ******/
+/****** Object:  Table [Person].[BusinessEntityAddress]    Script Date: 8/5/2018 10:46:26 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -244,7 +610,7 @@ CREATE TABLE [Person].[BusinessEntityAddress](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [Person].[BusinessEntityContact]    Script Date: 7/29/2018 8:38:20 PM ******/
+/****** Object:  Table [Person].[BusinessEntityContact]    Script Date: 8/5/2018 10:46:27 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -263,7 +629,7 @@ CREATE TABLE [Person].[BusinessEntityContact](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [Person].[ContactType]    Script Date: 7/29/2018 8:38:20 PM ******/
+/****** Object:  Table [Person].[ContactType]    Script Date: 8/5/2018 10:46:27 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -278,7 +644,7 @@ CREATE TABLE [Person].[ContactType](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [Person].[CountryRegion]    Script Date: 7/29/2018 8:38:20 PM ******/
+/****** Object:  Table [Person].[CountryRegion]    Script Date: 8/5/2018 10:46:27 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -293,7 +659,7 @@ CREATE TABLE [Person].[CountryRegion](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [Person].[EmailAddress]    Script Date: 7/29/2018 8:38:21 PM ******/
+/****** Object:  Table [Person].[EmailAddress]    Script Date: 8/5/2018 10:46:27 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -311,7 +677,7 @@ CREATE TABLE [Person].[EmailAddress](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [Person].[Password]    Script Date: 7/29/2018 8:38:21 PM ******/
+/****** Object:  Table [Person].[Password]    Script Date: 8/5/2018 10:46:27 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -328,7 +694,7 @@ CREATE TABLE [Person].[Password](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [Person].[Person]    Script Date: 7/29/2018 8:38:21 PM ******/
+/****** Object:  Table [Person].[Person]    Script Date: 8/5/2018 10:46:27 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -353,7 +719,7 @@ CREATE TABLE [Person].[Person](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [Person].[PersonPhone]    Script Date: 7/29/2018 8:38:21 PM ******/
+/****** Object:  Table [Person].[PersonPhone]    Script Date: 8/5/2018 10:46:27 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -371,7 +737,7 @@ CREATE TABLE [Person].[PersonPhone](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [Person].[PhoneNumberType]    Script Date: 7/29/2018 8:38:21 PM ******/
+/****** Object:  Table [Person].[PhoneNumberType]    Script Date: 8/5/2018 10:46:27 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -386,7 +752,7 @@ CREATE TABLE [Person].[PhoneNumberType](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [Person].[StateProvince]    Script Date: 7/29/2018 8:38:21 PM ******/
+/****** Object:  Table [Person].[StateProvince]    Script Date: 8/5/2018 10:46:27 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -406,7 +772,7 @@ CREATE TABLE [Person].[StateProvince](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [Production].[BillOfMaterials]    Script Date: 7/29/2018 8:38:21 PM ******/
+/****** Object:  Table [Production].[BillOfMaterials]    Script Date: 8/5/2018 10:46:27 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -427,7 +793,7 @@ CREATE TABLE [Production].[BillOfMaterials](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [Production].[Culture]    Script Date: 7/29/2018 8:38:21 PM ******/
+/****** Object:  Table [Production].[Culture]    Script Date: 8/5/2018 10:46:27 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -442,7 +808,7 @@ CREATE TABLE [Production].[Culture](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [Production].[Document]    Script Date: 7/29/2018 8:38:21 PM ******/
+/****** Object:  Table [Production].[Document]    Script Date: 8/5/2018 10:46:27 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -472,7 +838,7 @@ UNIQUE NONCLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [Production].[Illustration]    Script Date: 7/29/2018 8:38:21 PM ******/
+/****** Object:  Table [Production].[Illustration]    Script Date: 8/5/2018 10:46:27 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -487,7 +853,7 @@ CREATE TABLE [Production].[Illustration](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [Production].[Location]    Script Date: 7/29/2018 8:38:21 PM ******/
+/****** Object:  Table [Production].[Location]    Script Date: 8/5/2018 10:46:27 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -504,7 +870,7 @@ CREATE TABLE [Production].[Location](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [Production].[Product]    Script Date: 7/29/2018 8:38:21 PM ******/
+/****** Object:  Table [Production].[Product]    Script Date: 8/5/2018 10:46:27 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -541,7 +907,7 @@ CREATE TABLE [Production].[Product](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [Production].[ProductCategory]    Script Date: 7/29/2018 8:38:21 PM ******/
+/****** Object:  Table [Production].[ProductCategory]    Script Date: 8/5/2018 10:46:27 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -557,7 +923,7 @@ CREATE TABLE [Production].[ProductCategory](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [Production].[ProductCostHistory]    Script Date: 7/29/2018 8:38:21 PM ******/
+/****** Object:  Table [Production].[ProductCostHistory]    Script Date: 8/5/2018 10:46:28 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -575,7 +941,7 @@ CREATE TABLE [Production].[ProductCostHistory](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [Production].[ProductDescription]    Script Date: 7/29/2018 8:38:22 PM ******/
+/****** Object:  Table [Production].[ProductDescription]    Script Date: 8/5/2018 10:46:28 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -591,7 +957,7 @@ CREATE TABLE [Production].[ProductDescription](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [Production].[ProductDocument]    Script Date: 7/29/2018 8:38:22 PM ******/
+/****** Object:  Table [Production].[ProductDocument]    Script Date: 8/5/2018 10:46:28 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -607,7 +973,7 @@ CREATE TABLE [Production].[ProductDocument](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [Production].[ProductInventory]    Script Date: 7/29/2018 8:38:22 PM ******/
+/****** Object:  Table [Production].[ProductInventory]    Script Date: 8/5/2018 10:46:28 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -627,7 +993,7 @@ CREATE TABLE [Production].[ProductInventory](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [Production].[ProductListPriceHistory]    Script Date: 7/29/2018 8:38:22 PM ******/
+/****** Object:  Table [Production].[ProductListPriceHistory]    Script Date: 8/5/2018 10:46:28 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -645,7 +1011,7 @@ CREATE TABLE [Production].[ProductListPriceHistory](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [Production].[ProductModel]    Script Date: 7/29/2018 8:38:22 PM ******/
+/****** Object:  Table [Production].[ProductModel]    Script Date: 8/5/2018 10:46:28 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -663,7 +1029,7 @@ CREATE TABLE [Production].[ProductModel](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [Production].[ProductModelIllustration]    Script Date: 7/29/2018 8:38:22 PM ******/
+/****** Object:  Table [Production].[ProductModelIllustration]    Script Date: 8/5/2018 10:46:28 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -679,7 +1045,7 @@ CREATE TABLE [Production].[ProductModelIllustration](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [Production].[ProductModelProductDescriptionCulture]    Script Date: 7/29/2018 8:38:22 PM ******/
+/****** Object:  Table [Production].[ProductModelProductDescriptionCulture]    Script Date: 8/5/2018 10:46:28 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -697,7 +1063,7 @@ CREATE TABLE [Production].[ProductModelProductDescriptionCulture](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [Production].[ProductPhoto]    Script Date: 7/29/2018 8:38:22 PM ******/
+/****** Object:  Table [Production].[ProductPhoto]    Script Date: 8/5/2018 10:46:28 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -715,7 +1081,7 @@ CREATE TABLE [Production].[ProductPhoto](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [Production].[ProductProductPhoto]    Script Date: 7/29/2018 8:38:22 PM ******/
+/****** Object:  Table [Production].[ProductProductPhoto]    Script Date: 8/5/2018 10:46:28 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -732,7 +1098,7 @@ CREATE TABLE [Production].[ProductProductPhoto](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [Production].[ProductReview]    Script Date: 7/29/2018 8:38:22 PM ******/
+/****** Object:  Table [Production].[ProductReview]    Script Date: 8/5/2018 10:46:28 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -752,7 +1118,7 @@ CREATE TABLE [Production].[ProductReview](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [Production].[ProductSubcategory]    Script Date: 7/29/2018 8:38:22 PM ******/
+/****** Object:  Table [Production].[ProductSubcategory]    Script Date: 8/5/2018 10:46:28 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -769,7 +1135,7 @@ CREATE TABLE [Production].[ProductSubcategory](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [Production].[ScrapReason]    Script Date: 7/29/2018 8:38:22 PM ******/
+/****** Object:  Table [Production].[ScrapReason]    Script Date: 8/5/2018 10:46:28 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -784,7 +1150,7 @@ CREATE TABLE [Production].[ScrapReason](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [Production].[TransactionHistory]    Script Date: 7/29/2018 8:38:22 PM ******/
+/****** Object:  Table [Production].[TransactionHistory]    Script Date: 8/5/2018 10:46:28 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -805,7 +1171,7 @@ CREATE TABLE [Production].[TransactionHistory](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [Production].[TransactionHistoryArchive]    Script Date: 7/29/2018 8:38:22 PM ******/
+/****** Object:  Table [Production].[TransactionHistoryArchive]    Script Date: 8/5/2018 10:46:29 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -826,7 +1192,7 @@ CREATE TABLE [Production].[TransactionHistoryArchive](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [Production].[UnitMeasure]    Script Date: 7/29/2018 8:38:23 PM ******/
+/****** Object:  Table [Production].[UnitMeasure]    Script Date: 8/5/2018 10:46:29 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -841,7 +1207,7 @@ CREATE TABLE [Production].[UnitMeasure](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [Production].[WorkOrder]    Script Date: 7/29/2018 8:38:23 PM ******/
+/****** Object:  Table [Production].[WorkOrder]    Script Date: 8/5/2018 10:46:29 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -863,7 +1229,7 @@ CREATE TABLE [Production].[WorkOrder](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [Production].[WorkOrderRouting]    Script Date: 7/29/2018 8:38:23 PM ******/
+/****** Object:  Table [Production].[WorkOrderRouting]    Script Date: 8/5/2018 10:46:29 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -889,7 +1255,7 @@ CREATE TABLE [Production].[WorkOrderRouting](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [Purchasing].[ProductVendor]    Script Date: 7/29/2018 8:38:23 PM ******/
+/****** Object:  Table [Purchasing].[ProductVendor]    Script Date: 8/5/2018 10:46:29 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -913,7 +1279,7 @@ CREATE TABLE [Purchasing].[ProductVendor](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [Purchasing].[PurchaseOrderDetail]    Script Date: 7/29/2018 8:38:23 PM ******/
+/****** Object:  Table [Purchasing].[PurchaseOrderDetail]    Script Date: 8/5/2018 10:46:29 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -937,7 +1303,7 @@ CREATE TABLE [Purchasing].[PurchaseOrderDetail](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [Purchasing].[PurchaseOrderHeader]    Script Date: 7/29/2018 8:38:23 PM ******/
+/****** Object:  Table [Purchasing].[PurchaseOrderHeader]    Script Date: 8/5/2018 10:46:29 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -962,7 +1328,7 @@ CREATE TABLE [Purchasing].[PurchaseOrderHeader](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [Purchasing].[ShipMethod]    Script Date: 7/29/2018 8:38:23 PM ******/
+/****** Object:  Table [Purchasing].[ShipMethod]    Script Date: 8/5/2018 10:46:29 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -980,7 +1346,7 @@ CREATE TABLE [Purchasing].[ShipMethod](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [Purchasing].[Vendor]    Script Date: 7/29/2018 8:38:23 PM ******/
+/****** Object:  Table [Purchasing].[Vendor]    Script Date: 8/5/2018 10:46:29 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1000,7 +1366,7 @@ CREATE TABLE [Purchasing].[Vendor](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [Sales].[CountryRegionCurrency]    Script Date: 7/29/2018 8:38:23 PM ******/
+/****** Object:  Table [Sales].[CountryRegionCurrency]    Script Date: 8/5/2018 10:46:29 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1016,7 +1382,7 @@ CREATE TABLE [Sales].[CountryRegionCurrency](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [Sales].[CreditCard]    Script Date: 7/29/2018 8:38:23 PM ******/
+/****** Object:  Table [Sales].[CreditCard]    Script Date: 8/5/2018 10:46:29 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1034,7 +1400,7 @@ CREATE TABLE [Sales].[CreditCard](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [Sales].[Currency]    Script Date: 7/29/2018 8:38:23 PM ******/
+/****** Object:  Table [Sales].[Currency]    Script Date: 8/5/2018 10:46:29 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1049,7 +1415,7 @@ CREATE TABLE [Sales].[Currency](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [Sales].[CurrencyRate]    Script Date: 7/29/2018 8:38:23 PM ******/
+/****** Object:  Table [Sales].[CurrencyRate]    Script Date: 8/5/2018 10:46:29 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1068,26 +1434,7 @@ CREATE TABLE [Sales].[CurrencyRate](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [Sales].[Customer]    Script Date: 7/29/2018 8:38:23 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [Sales].[Customer](
-	[CustomerID] [int] IDENTITY(1,1) NOT FOR REPLICATION NOT NULL,
-	[PersonID] [int] NULL,
-	[StoreID] [int] NULL,
-	[TerritoryID] [int] NULL,
-	[AccountNumber]  AS (isnull('AW'+[dbo].[ufnLeadingZeros]([CustomerID]),'')),
-	[rowguid] [uniqueidentifier] ROWGUIDCOL  NOT NULL,
-	[ModifiedDate] [datetime] NOT NULL,
- CONSTRAINT [PK_Customer_CustomerID] PRIMARY KEY CLUSTERED 
-(
-	[CustomerID] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-/****** Object:  Table [Sales].[PersonCreditCard]    Script Date: 7/29/2018 8:38:24 PM ******/
+/****** Object:  Table [Sales].[PersonCreditCard]    Script Date: 8/5/2018 10:46:29 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1103,7 +1450,7 @@ CREATE TABLE [Sales].[PersonCreditCard](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [Sales].[SalesOrderDetail]    Script Date: 7/29/2018 8:38:24 PM ******/
+/****** Object:  Table [Sales].[SalesOrderDetail]    Script Date: 8/5/2018 10:46:29 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1127,7 +1474,7 @@ CREATE TABLE [Sales].[SalesOrderDetail](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [Sales].[SalesOrderHeader]    Script Date: 7/29/2018 8:38:24 PM ******/
+/****** Object:  Table [Sales].[SalesOrderHeader]    Script Date: 8/5/2018 10:46:30 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1165,7 +1512,7 @@ CREATE TABLE [Sales].[SalesOrderHeader](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [Sales].[SalesOrderHeaderSalesReason]    Script Date: 7/29/2018 8:38:24 PM ******/
+/****** Object:  Table [Sales].[SalesOrderHeaderSalesReason]    Script Date: 8/5/2018 10:46:30 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1181,7 +1528,7 @@ CREATE TABLE [Sales].[SalesOrderHeaderSalesReason](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [Sales].[SalesPerson]    Script Date: 7/29/2018 8:38:24 PM ******/
+/****** Object:  Table [Sales].[SalesPerson]    Script Date: 8/5/2018 10:46:30 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1202,7 +1549,7 @@ CREATE TABLE [Sales].[SalesPerson](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [Sales].[SalesPersonQuotaHistory]    Script Date: 7/29/2018 8:38:24 PM ******/
+/****** Object:  Table [Sales].[SalesPersonQuotaHistory]    Script Date: 8/5/2018 10:46:30 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1220,7 +1567,7 @@ CREATE TABLE [Sales].[SalesPersonQuotaHistory](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [Sales].[SalesReason]    Script Date: 7/29/2018 8:38:24 PM ******/
+/****** Object:  Table [Sales].[SalesReason]    Script Date: 8/5/2018 10:46:30 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1236,7 +1583,7 @@ CREATE TABLE [Sales].[SalesReason](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [Sales].[SalesTaxRate]    Script Date: 7/29/2018 8:38:24 PM ******/
+/****** Object:  Table [Sales].[SalesTaxRate]    Script Date: 8/5/2018 10:46:30 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1255,7 +1602,7 @@ CREATE TABLE [Sales].[SalesTaxRate](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [Sales].[SalesTerritory]    Script Date: 7/29/2018 8:38:24 PM ******/
+/****** Object:  Table [Sales].[SalesTerritory]    Script Date: 8/5/2018 10:46:30 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1277,7 +1624,7 @@ CREATE TABLE [Sales].[SalesTerritory](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [Sales].[SalesTerritoryHistory]    Script Date: 7/29/2018 8:38:24 PM ******/
+/****** Object:  Table [Sales].[SalesTerritoryHistory]    Script Date: 8/5/2018 10:46:30 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1297,7 +1644,7 @@ CREATE TABLE [Sales].[SalesTerritoryHistory](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [Sales].[ShoppingCartItem]    Script Date: 7/29/2018 8:38:24 PM ******/
+/****** Object:  Table [Sales].[ShoppingCartItem]    Script Date: 8/5/2018 10:46:30 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1315,7 +1662,7 @@ CREATE TABLE [Sales].[ShoppingCartItem](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [Sales].[SpecialOffer]    Script Date: 7/29/2018 8:38:24 PM ******/
+/****** Object:  Table [Sales].[SpecialOffer]    Script Date: 8/5/2018 10:46:30 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1338,7 +1685,7 @@ CREATE TABLE [Sales].[SpecialOffer](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [Sales].[SpecialOfferProduct]    Script Date: 7/29/2018 8:38:25 PM ******/
+/****** Object:  Table [Sales].[SpecialOfferProduct]    Script Date: 8/5/2018 10:46:30 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1355,7 +1702,7 @@ CREATE TABLE [Sales].[SpecialOfferProduct](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [Sales].[Store]    Script Date: 7/29/2018 8:38:25 PM ******/
+/****** Object:  Table [Sales].[Store]    Script Date: 8/5/2018 10:46:30 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
