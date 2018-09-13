@@ -8,12 +8,18 @@
 
   <ItemGroup>
     <None Remove="Scripts\AdventureWorksCreate.sql" />
+    <None Remove="Scripts\EphemeralCreate.sql" />
+    <None Remove="Scripts\EphemeralData.sql" />
+    <None Remove="Scripts\SimpleCreate.sql" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Scripts\AdventureWorksCreate.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
+    <EmbeddedResource Include="Scripts\SimpleCreate.sql" />
+    <EmbeddedResource Include="Scripts\EphemeralData.sql" />
+    <EmbeddedResource Include="Scripts\EphemeralCreate.sql" />
   </ItemGroup>
 
   <ItemGroup>
