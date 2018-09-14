@@ -1991,11 +1991,17 @@ alter_table
                              | ALTER COLUMN column_definition
                              | DROP COLUMN id
                              | DROP CONSTRAINT constraint=id
-                             | WITH CHECK ADD CONSTRAINT constraint=id FOREIGN KEY '(' fk = column_name_list ')' REFERENCES table_name '(' pk = column_name_list')'
+                             | WITH CHECK ADD CONSTRAINT constraint=id constraint_definition
                              | CHECK CONSTRAINT constraint=id
                              | (ENABLE | DISABLE) TRIGGER id?
                              | REBUILD table_options)
                              ';'?
+    ;
+
+// https://docs.microsoft.com/en-us/sql/t-sql/statements/alter-table-table-constraint-transact-sql?view=sql-server-2017
+constraint_definition
+    : FOREIGN KEY '(' fk = column_name_list ')' REFERENCES table_name '(' pk = column_name_list')' ( ON DELETE ( NO ACTION | CASCADE | SET NULL | SET DEFAULT ) )? ( ON UPDATE ( NO ACTION | CASCADE | SET NULL | SET DEFAULT ) )?
+      | CHECK ( NOT FOR REPLICATION )? expression
     ;
 
 // https://msdn.microsoft.com/en-us/library/ms174269.aspx
