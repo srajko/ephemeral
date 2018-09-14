@@ -2733,7 +2733,7 @@ table_constraint
     : (CONSTRAINT constraint=id)?
        ((PRIMARY KEY | UNIQUE) clustered? '(' column_name_list_with_order ')' index_options? (ON id)?
          | CHECK (NOT FOR REPLICATION)? '(' search_condition ')'
-         | DEFAULT '('?  (STRING | PLUS | function_call | DECIMAL)+ ')'? FOR id
+         | DEFAULT '('?  (STRING | PLUS | function_call | DECIMAL | expression)+ ')'? FOR id
          | FOREIGN KEY '(' fk = column_name_list ')' REFERENCES table_name ('(' pk = column_name_list')')? on_delete? on_update?)
     ;
 
@@ -2819,6 +2819,8 @@ expression
     | expression op=('+' | '-' | '&' | '^' | '|' | '||') expression
     | expression comparison_operator expression
     | expression assignment_operator expression
+    | expression logical_operator expression
+    | expression IS null_notnull
     | over_clause
     ;
 
@@ -2894,7 +2896,7 @@ predicate
     | expression NOT? BETWEEN expression AND expression
     | expression NOT? IN '(' (subquery | expression_list) ')'
     | expression NOT? LIKE expression (ESCAPE expression)?
-    | expression IS null_notnull
+    | expression
     | '(' search_condition ')'
     ;
 
@@ -3567,6 +3569,7 @@ data_type
 
 default_value
     : NULL
+    | NOT NULL
     | DEFAULT
     | constant
     ;
@@ -4020,11 +4023,15 @@ simple_id
 // https://msdn.microsoft.com/en-us/library/ms188074.aspx
 // Spaces are allowed for comparison operators.
 comparison_operator
-    : '=' | '>' | '<' | '<' '=' | '>' '=' | '<' '>' | '!' '=' | '!' '>' | '!' '<'
+    : '=' | '>' | '<' | '<' '=' | '>' '=' | '<' '>' | '!' '=' | '!' '>' | '!' '<' | LIKE
     ;
 
 assignment_operator
     : '+=' | '-=' | '*=' | '/=' | '%=' | '&=' | '^=' | '|='
+    ;
+
+logical_operator
+    : AND | OR
     ;
 
 file_size
