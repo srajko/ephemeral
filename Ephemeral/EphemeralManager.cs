@@ -4,7 +4,6 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using TSql;
 
 namespace Ephemeral
 {
@@ -21,10 +20,10 @@ namespace Ephemeral
             }
         }
 
-        public TestDatabase GetTestDatabase(string databaseScript, Variant variant = Variant.Default, string dataScript = null)
+        public TestDatabase GetTestDatabase(string schemaScript, Variant variant = Variant.Default, string dataScript = null)
         {
             var sha512 = SHA512Managed.Create();
-            var bytes = Encoding.UTF8.GetBytes(databaseScript);
+            var bytes = Encoding.UTF8.GetBytes(schemaScript);
             var hash = sha512.ComputeHash(bytes);
 
             bool createDatabase = false;
@@ -60,62 +59,14 @@ namespace Ephemeral
                 connectionString = GetConnectionString(id.Value);
             }
 
-            using (var newDbContext = ContextForConnectionString(connectionString))
+            var testDatabase = new TestDatabase(connectionString, id.Value, DatabaseConnectionString, dataScript);
+            if (createDatabase)
             {
-                if (createDatabase)
-                {
-                    newDbContext.Database.EnsureCreated();
-
-                    if (variant == Variant.MemoryOptimized)
-                    {
-                        var databaseFiles = newDbContext.DatabaseFiles.FromSql("SELECT * FROM sys.database_files").ToList();
-
-                        var builder = new SqlConnectionStringBuilder(connectionString);
-                        var turnAutoCloseOffSql = $"ALTER DATABASE [{builder.InitialCatalog}]  SET AUTO_CLOSE OFF";
-                        var addFilegroupSql = $"ALTER DATABASE [{builder.InitialCatalog}] ADD FILEGROUP memory_optimized CONTAINS MEMORY_OPTIMIZED_DATA";
-                        var addFileSql = $"ALTER DATABASE [{builder.InitialCatalog}] ADD FILE (name='memory_optimized_file', filename='{databaseFiles.First().PhysicalName}.mem') TO FILEGROUP memory_optimized";
-                        newDbContext.Database.ExecuteSqlCommand(turnAutoCloseOffSql);
-                        newDbContext.Database.ExecuteSqlCommand(addFilegroupSql);
-                        newDbContext.Database.ExecuteSqlCommand(addFileSql);
-                    }
-
-                    foreach (var (batch, batchSql) in TSqlUtilities.GetBatches(databaseScript))
-                    {
-                        var sql = batchSql;
-                        if (variant == Variant.MemoryOptimized)
-                        {
-                            var visitor = new MemoryOptimizedVisitor();
-                            visitor.Visit(batch);
-                            sql = visitor.Transform(batchSql, batch.Start.StartIndex);
-                        }
-
-                        try
-                        {
-                            newDbContext.Database.ExecuteSqlCommand(sql);
-                        } catch (Exception exception)
-                        {
-                            throw new Exception($"Failed executing SQL command\n{sql}", exception);
-                        }
-                    }
-                }
-                else
-                {
-                    // delete data
-                    newDbContext.Database.ExecuteSqlCommand(@"
-EXEC sp_MSForEachTable 'ALTER TABLE ? NOCHECK CONSTRAINT ALL'
-EXEC sp_MSForEachTable 'DELETE FROM ?'
-EXEC sp_MSForEachTable 'ALTER TABLE ? WITH CHECK CHECK CONSTRAINT ALL'");
-                }
-                if (dataScript != null)
-                {
-                    // run the initial data script
-                    foreach (var (batch, batchSql) in TSqlUtilities.GetBatches(dataScript))
-                    {
-                        newDbContext.Database.ExecuteSqlCommand(batchSql);
-                    }
-                }
+                testDatabase.Create(schemaScript, variant);
             }
-            return new TestDatabase(connectionString, id.Value, DatabaseConnectionString);
+            testDatabase.ResetData();
+
+            return testDatabase;
         }
 
         public void DeleteAllDatabases()
@@ -128,10 +79,7 @@ EXEC sp_MSForEachTable 'ALTER TABLE ? WITH CHECK CHECK CONSTRAINT ALL'");
 
                 foreach (var database in databases)
                 {
-                    using (var ephemeralContext = ContextForConnectionString(GetConnectionString(database.Id)))
-                    {
-                        ephemeralContext.Database.EnsureDeleted();
-                    }
+                    new TestDatabase(GetConnectionString(database.Id), database.Id, DatabaseConnectionString, null).Delete();
                 }
             }
         }
@@ -141,16 +89,6 @@ EXEC sp_MSForEachTable 'ALTER TABLE ? WITH CHECK CHECK CONSTRAINT ALL'");
             var builder = new SqlConnectionStringBuilder(DatabaseConnectionString);
             builder.InitialCatalog += "-" + id;
             return builder.ToString();
-        }
-
-        private TestDatabaseDbContext ContextForConnectionString(string connectionString)
-        {
-            return
-                new TestDatabaseDbContext(
-                    new DbContextOptionsBuilder<DbContext>()
-                        .UseSqlServer(connectionString)
-                        .Options
-                );
-        }
+        }        
     }
 }
