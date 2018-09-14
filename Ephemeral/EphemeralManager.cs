@@ -89,7 +89,13 @@ namespace Ephemeral
                             sql = visitor.Transform(batchSql, batch.Start.StartIndex);
                         }
 
-                        newDbContext.Database.ExecuteSqlCommand(sql);
+                        try
+                        {
+                            newDbContext.Database.ExecuteSqlCommand(sql);
+                        } catch (Exception exception)
+                        {
+                            throw new Exception($"Failed executing SQL command\n{sql}", exception);
+                        }
                     }
                 }
                 else
