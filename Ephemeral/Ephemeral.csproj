@@ -2,6 +2,10 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <Version>0.0.1-alpha1</Version>
+    <Authors>Stjepan Rajko, Offerpad</Authors>
+    <Description>A utility for testing with a SQL Server database.</Description>
   </PropertyGroup>
 
   <ItemGroup>

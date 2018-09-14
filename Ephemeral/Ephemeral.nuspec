@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>$author$</authors>
+    <owners>$author$</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>$description$</description>
+    <copyright>Copyright 2018 Stjepan Rajko, Offerpad</copyright>
+    <dependencies>
+      <dependency id="Microsoft.EntityFrameworkCore" version="2.1.1" />
+      <dependency id="Microsoft.EntityFrameworkCore.SqlServer" version="2.1.1" />
+      <dependency id="Antlr4.Runtime" version="4.6.4" />      
+    </dependencies>
+  </metadata>
+</package>
