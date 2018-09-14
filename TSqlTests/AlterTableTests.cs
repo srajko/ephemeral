@@ -34,5 +34,13 @@ ON DELETE CASCADE";
 
             TestUtilities.TestParsing(sql, parser => parser.alter_table());
         }
+
+        [TestMethod]
+        public void TestAddAnonymousCheckConstraint()
+        {
+            var sql = "ALTER TABLE [HumanResources].[Employee]  WITH CHECK ADD CHECK  (([BirthDate]>='1930-01-01' AND [BirthDate]<=dateadd(year,(-18),getdate())))";
+
+            TestUtilities.TestParsing(sql, parser => parser.alter_table());
+        }
     }
 }

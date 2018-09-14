@@ -1991,7 +1991,7 @@ alter_table
                              | ALTER COLUMN column_definition
                              | DROP COLUMN id
                              | DROP CONSTRAINT constraint=id
-                             | WITH CHECK ADD CONSTRAINT constraint=id constraint_definition
+                             | WITH CHECK ADD (CONSTRAINT constraint=id)? constraint_definition
                              | CHECK CONSTRAINT constraint=id
                              | (ENABLE | DISABLE) TRIGGER id?
                              | REBUILD table_options)
