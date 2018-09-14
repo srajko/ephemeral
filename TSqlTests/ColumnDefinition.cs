@@ -28,5 +28,15 @@ namespace TSqlTests
             var columnDefinition = parser.column_definition();
             Assert.AreEqual("[TotalDue]AS(isnull(([SubTotal]+[TaxAmt])+[Freight],(0)))PERSISTEDNOTNULL", columnDefinition.GetText());
         }
+
+        [TestMethod]
+        public void TestMaskedWithColumnDefinition()
+        {
+            var maskedWithColumnDefinition = "Email varchar(100) MASKED WITH (FUNCTION = 'email()') NULL";
+
+            TSqlParser parser = TSqlUtilities.GetParser(maskedWithColumnDefinition);
+            var columnDefinition = parser.column_definition();
+            Assert.AreEqual("Emailvarchar(100)MASKEDWITH(FUNCTION='email()')NULL", columnDefinition.GetText());
+        }
     }
 }

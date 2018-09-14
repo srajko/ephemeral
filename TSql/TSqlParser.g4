@@ -2705,6 +2705,7 @@ column_definition
        | IDENTITY ('(' seed=DECIMAL ',' increment=DECIMAL ')')? (NOT FOR REPLICATION)?)?
       SPARSE?
       ROWGUIDCOL?
+      (MASKED WITH LR_BRACKET FUNCTION EQUAL STRING RR_BRACKET)?
       column_constraint*
     ;
 

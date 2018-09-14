@@ -212,6 +212,7 @@ LOAD:                                  'LOAD';
 LOCAL_SERVICE_NAME:                    'LOCAL_SERVICE_NAME';
 LOG:                                   'LOG';
 MATCHED:                               'MATCHED';
+MASKED:                                'MASKED';
 MASTER:                                'MASTER';
 MAX_MEMORY:                            'MAX_MEMORY';
 MAXTRANSFER:                           'MAXTRANSFER';
